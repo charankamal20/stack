@@ -17,6 +17,7 @@ class Stack {
     void pop();
     bool isEmpty();
     int tos();
+    void printStack();
 
 };
 
@@ -36,20 +37,42 @@ void Stack::push(int Data )   {
         temp->next = NULL;
         temp->data = Data;
         TOS = temp;
+        printStack();
         return ;    
     }
 
     temp->next = TOS;
     TOS = temp;
     temp->data = Data;
-
+    printStack();
 }
 
+void Stack::pop()   {
+    TOS = TOS->next;
+    printStack();
+}
+
+int Stack::tos()    {
+    return TOS->data;
+}
+
+void Stack::printStack()    {
+    Stack* temp;
+    temp = TOS;
+    while (temp != NULL)    {
+        cout << temp->data << endl;
+        temp = temp->next;
+    }
+}
 
 int main()  {
 
     Stack S;
-    S.isEmpty();
+    S.push(5);
+    S.push(7);
+    S.pop();
+    S.push(8);
+
     getchar();
 
     return 0;
