@@ -5,54 +5,56 @@ using namespace std;
 class Stack {
 
     private:
-    Stack* next;
-    int data;
-    
+    Stack* link;
+    Stack* TOS;
+    char data;
+
     public:
-    Stack() {
+    Stack() { 
         cout << "Welcome to the constructor\n";
-        next = NULL;
+        link = NULL;
+        TOS = NULL;
     }
-    void push(int Data);
+    void push(char Data);
     void pop();
     bool isEmpty();
-    int tos();
+    char tos();
     void printStack();
 
 };
 
-Stack* TOS = NULL;
 
 bool Stack :: isEmpty() {
     if(TOS == NULL) return 1;
-    
+
     else return 0 ;
 }
 
-void Stack::push(int Data )   {
+void Stack::push(char Data)   {
     
     Stack* temp = new Stack();
     if (isEmpty())  {
         cout << "First element in the stack\n";
-        temp->next = NULL;
+        temp->link = NULL;
         temp->data = Data;
         TOS = temp;
-        printStack();
         return ;    
     }
 
-    temp->next = TOS;
+    temp->link = TOS;
     TOS = temp;
     temp->data = Data;
-    printStack();
 }
 
 void Stack::pop()   {
-    TOS = TOS->next;
+    Stack* temp;
+    temp = TOS;
+    TOS = TOS->link;
+    delete(temp);
     printStack();
 }
 
-int Stack::tos()    {
+char Stack::tos()    {
     return TOS->data;
 }
 
@@ -61,17 +63,49 @@ void Stack::printStack()    {
     temp = TOS;
     while (temp != NULL)    {
         cout << temp->data << endl;
-        temp = temp->next;
+        temp = temp->link;
     }
+}
+
+bool Operator(char value)    {
+    if (value == '+' || value == '-' || value == '*' || value == '/' || value == '^')   
+        return 1;
+    else return 0;
+}
+
+string infixToPostfix(string expression)   {
+    //int iexpression;
+    Stack stackForOperator;
+    string postfix;
+    postfix = "";
+
+    for (int i = 0; expression[i] != '\0'; i++)    {
+        if (!Operator(expression[i])) {
+            //iexpression = (int)expression[i] - 48;
+            //cout << "\\" << iexpression << endl;
+            postfix = postfix + expression[i];
+        }
+        else {
+            stackForOperator.push(expression[i]);
+        }
+    }
+    cout << "\n---------------\n" ;
+    cout << "\n---------------\n" ;
+    stackForOperator.printStack();
+
+    return postfix;
 }
 
 int main()  {
 
-    Stack S;
-    S.push(5);
-    S.push(7);
-    S.pop();
-    S.push(8);
+    string expression;
+    string result;
+
+    cout << "\nEnter an expression: ";
+    getline(cin, expression);
+
+    result = infixToPostfix(expression);
+    cout << endl << result;
 
     getchar();
 
