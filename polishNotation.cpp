@@ -88,34 +88,39 @@ bool operatorPrecedence(char operatorRead, Stack* TOS)  {
 }
 
 string infixToPostfix(string expression)   {
-    //int iexpression;
+
     Stack stackForOperator;
+    Stack *temp;
     string postfix;
     postfix = "";
 
     for (int i = 0; expression[i] != '\0'; i++)    {
-
         if (expression[i] == '(' || expression[i] == ')' || expression[i] == ' ')   continue;
 
         if (!Operator(expression[i])) {
-            //iexpression = (int)expression[i] - 48;
-            //cout << "\\" << iexpression << endl;
             postfix = postfix + expression[i];
         }
         else {
+
             if (operatorPrecedence(expression[i], stackForOperator.getTOS()))   {
-                postfix = postfix + stackForOperator.tos();
-                stackForOperator.pop();
+                while (operatorPrecedence(expression[i], stackForOperator.getTOS()))    {
+                    postfix = postfix + stackForOperator.tos();
+                    stackForOperator.pop();
+                }
                 stackForOperator.push(expression[i]); 
             }
             else    {
                 stackForOperator.push(expression[i]);
-                
+
             }
+
         }
     }
-    cout << "\n---------------\n" ;
-    stackForOperator.printStack();
+    temp = stackForOperator.getTOS();
+    while (!stackForOperator.isEmpty()) {
+        postfix = postfix + stackForOperator.tos();
+        stackForOperator.pop();
+    }
     return postfix;
 }
 
