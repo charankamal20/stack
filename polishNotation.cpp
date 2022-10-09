@@ -20,7 +20,12 @@ class Stack {
     bool isEmpty();
     char tos();
     void printStack();
-
+    char getData()  {
+        return data;
+    }
+    Stack* getTOS() {
+        return TOS;
+    };
 };
 
 
@@ -73,6 +78,15 @@ bool Operator(char value)    {
     else return 0;
 }
 
+bool operatorPrecedence(char operatorRead, Stack* TOS)  {
+    
+    if (TOS == NULL)    return 0;
+    if ((TOS->getData() == '+' && operatorRead == '-') || (TOS->getData() == '-' && operatorRead == '+'))  return 1;    // condition for pop
+    if ((TOS->getData() == '*' || TOS->getData() == '/') && (operatorRead == '-' || operatorRead == '+'))   return 1;
+
+    return 0;
+}
+
 string infixToPostfix(string expression)   {
     //int iexpression;
     Stack stackForOperator;
@@ -80,19 +94,28 @@ string infixToPostfix(string expression)   {
     postfix = "";
 
     for (int i = 0; expression[i] != '\0'; i++)    {
+
+        if (expression[i] == '(' || expression[i] == ')' || expression[i] == ' ')   continue;
+
         if (!Operator(expression[i])) {
             //iexpression = (int)expression[i] - 48;
             //cout << "\\" << iexpression << endl;
             postfix = postfix + expression[i];
         }
         else {
-            stackForOperator.push(expression[i]);
+            if (operatorPrecedence(expression[i], stackForOperator.getTOS()))   {
+                postfix = postfix + stackForOperator.tos();
+                stackForOperator.pop();
+                stackForOperator.push(expression[i]); 
+            }
+            else    {
+                stackForOperator.push(expression[i]);
+                
+            }
         }
     }
     cout << "\n---------------\n" ;
-    cout << "\n---------------\n" ;
     stackForOperator.printStack();
-
     return postfix;
 }
 
