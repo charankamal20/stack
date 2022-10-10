@@ -1,8 +1,7 @@
 #include<bits/stdc++.h>
-
 using namespace std;
 
-template <typename T>
+template <typename T>       // making a template class so we can use it for integer and character data 
 class Stack {
 
     private:
@@ -227,6 +226,11 @@ int evaluatePostfix(string expression)   {
 
         if (expression[i] == ',' || expression[i] == ' ')   
             continue;
+        
+        if(!IsOperator(expression[i]) && !isOperand(expression[i]))     {
+            cout << "\nError: Invalid expression entered";
+            return 0;
+        }
 
         if (IsOperator(expression[i]))  {
             val2 = postfix.tos();
@@ -259,6 +263,11 @@ int evaluatePrefix(string expression)   {
 
         if (expression[i] == ',' || expression[i] == ' ')   
             continue;
+        
+        if(!IsOperator(expression[i]) && !isOperand(expression[i]))     {
+            cout << "\nError: Invalid expression entered";
+            return 0;
+        }
 
         if (IsOperator(expression[i]))  {
             val1 = prefix.tos();
@@ -269,6 +278,7 @@ int evaluatePrefix(string expression)   {
             prefix.push(result);
         }
         else {
+            
             int operand = 0;
             while(isOperand(expression[i])) {
                 operand = (operand*10) + (expression[i] - 48);
@@ -297,7 +307,7 @@ int main()  {
     flag = &res;
 
     while(1)    {
-
+    res = 1;
     system("cls");
     cout << "\n--IMPLEMENTATION OF POLISH NOTATION USING STACK--\n";
     cout << "Available operations: \n";
@@ -320,7 +330,8 @@ int main()  {
                 cout << "\nDo you wish to evaluate this expression(1/0): ";
                 cin >> choice;
                 if (choice == 1)    {
-                    cout << "\nResult after evaluation: " << evaluatePostfix(result);    
+                    cout << "\nResult after evaluation: " << evaluatePostfix(result);  
+                    getchar();  
                 }
             }
             break;
@@ -334,7 +345,8 @@ int main()  {
                 cout << "\nDo you wish to evaluate this expression(1/0): ";
                 cin >> choice;
                 if (choice == 1)    {
-                    cout << "\nResult after evaluation: " << evaluatePrefix(result);    
+                    cout << "\nResult after evaluation: " << evaluatePrefix(result);  
+                    getchar();  
                 }
             }
             break;
